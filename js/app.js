@@ -7,11 +7,14 @@ let score = 0;
 let timeLeft = 5;
 let gameStarted = false;
 let gameEnded = false;
+let interval = null;
 
 // HTML DOM
 const button1 = document.getElementById('button1');
 const scoreDisplay = document.getElementById('scoreDisplay');
 const timerDisplay = document.getElementById('timerDisplay');
+const label1 = document.getElementById('label1');
+const input1 = document.getElementById('name');
 
 // UI Functions & Events
 button1.addEventListener('click', () => {
@@ -24,6 +27,9 @@ button1.addEventListener('click', () => {
   }
 })
 
+input1.style.display = 'none';
+label1.style.display = 'none';
+
 // Functions
 function increaseScore() {
   score++;
@@ -32,6 +38,7 @@ function increaseScore() {
 function countdown() {
     timeLeft--;
     timerDisplay.innerText = timeLeft;
+
     if(timeLeft <= 0) {
       endGame();
       timerDisplay.innerText = 0;
@@ -39,10 +46,14 @@ function countdown() {
 }
 
 function startGame() {
-  setInterval(countdown, 1000);
+  interval = setInterval(countdown, 1000);
   gameStarted = true;
 }
 
 function endGame() {
   gameEnded = true;
+  clearInterval(interval);
+  button1.style.display = 'none';
+  input1.style.display = 'block';
+  label1.style.display = 'block';
 }
