@@ -25,22 +25,36 @@
 <body>
 
   <!-- Add your site or application content here -->
-  <p>Hello world! This is HTML5 Boilerplate.</p>
+  <h1 id="title">Welcome to The Game</h1>
 
-  <p id="timerDisplay">5</p>
-  <p id="scoreDisplay">0</p>
+  <div class="stats">
+
+    <div class="stat" id="timerBox">
+      <p class="label">Time Left</p>
+      <p id="timerDisplay">5</p>
+    </div>
+
+    <div class="stat">
+      <p class="label">Score</p>
+      <p id="scoreDisplay">0</p>
+    </div>
+
+  </div>
+
   <button id="button1">Click me</button>
 
   <label id="label1" for="name">Name (3 to 16 characters):</label>
 
   <input
+    placeholder="Enter your name"
     type="text"
     id="name"
     name="name"
     required
     minlength="3"
-    maxlength="12"
-    size="16" />
+    maxlength="16"
+    size="16"
+  />
 
   <button id="button2">Submit High Score</button>
 

@@ -245,3 +245,53 @@ textarea {
   }
 }
 
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  text-align: center;
+  font-family: Arial, sans-serif;           /* Text font */
+}
+#title {
+  font-family: 'Orbitron', sans-serif;      /* H1 font */
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+.stats {
+  display: flex;
+  gap: 40px;
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+.stat p {
+  margin: 0;
+}
+#timerDisplay, #scoreDisplay {
+  font-size: 30px;
+  font-weight: bold;
+}
+#button1 {                /* Styling button1 */
+  margin-top: 30px;
+  padding: 12px 24px;
+  font-size: 18px;
+  background: #111;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;      /* Change to pointer */
+}
+#button1:hover {        /* Change color of button when hovering */
+  background: #333;
+}
+

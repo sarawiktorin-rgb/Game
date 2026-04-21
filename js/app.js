@@ -10,12 +10,14 @@ let gameEnded = false;
 let interval = null;
 
 // HTML DOM
+const title = document.getElementById('title');
 const button1 = document.getElementById('button1');
 const button2 = document.getElementById('button2');
 const scoreDisplay = document.getElementById('scoreDisplay');
 const timerDisplay = document.getElementById('timerDisplay');
 const label1 = document.getElementById('label1');
 const input1 = document.getElementById('name');
+const timerBox = document.getElementById('timerBox');
 
 // UI Functions & Events
 button1.addEventListener('click', () => {
@@ -59,12 +61,57 @@ function startGame() {
 function endGame() {
   gameEnded = true;
   clearInterval(interval);
+
+  title.innerText = "Game Over";
+  timerBox.style.display = 'none';
+
   button1.style.display = 'none';
   input1.style.display = 'block';
   label1.style.display = 'block';
   button2.style.display = 'block';
 }
 
-function submitHighScore() {
-  console.log(input1.value);
+async function submitHighScore() {
+  const currentScore = score; // använder spelets score
+
+  try {
+    const response = await fetch("https://hooks.zapier.com/hooks/catch/8338993/ujs9jj9/", {
+      method: "POST",
+      body: JSON.stringify({
+        name: input1.value,
+        score: currentScore
+      })
+    });
+
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
 }
+
+function getScoreBoardData() {
+  const url = 'https://script.google.com/macros/s/AKfycbys5aEPMvNCutyhNYYCcQcCjzsi2UtqNspmKyCH-AicJxJbCJMrAoT0LUaYaXhTWA8n/exec';
+  fetch(url)
+    .then(response => {
+      console.log('Response object:', response);
+      return response.json();
+    })
+    .then(data => {
+      console.log('Scoreboard data:', data);
+
+      data.forEach((player, index) => {
+        console.log(`Row ${index + 1}: Name=${player.name}, Score=${player.score}`);
+      });
+    })
+    .catch(error => {
+      console.error('Fetch error:', error);
+    });
+}
+getScoreBoardData();
+
+// post value to API.
+// create and read. name + high score
+// zapier.com
+
+
+
