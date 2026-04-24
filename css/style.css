@@ -352,7 +352,7 @@ body {
   font-size: 16px;
 }
 
-#scoreboard li.highlight {
+#scoreboard li.highlight { /* Highlight the player´s score i the scoreboard list */
   background: #00ffcc;
   font-weight: bold;
 }
@@ -360,5 +360,4 @@ body {
 #loadingText {
   margin-top: 20px;
   font-size: 18px;
-  animation: blink 1s infinite;
 }
