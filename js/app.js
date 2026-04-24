@@ -1,13 +1,11 @@
-// Click a button or object to earn points so that I can increase my score.
-// See my current score during the game so that I know how well I am doing.
-// See a countdown timer so that I know how much time is left.
-
 // Variables
 let score = 0;
 let timeLeft = 5;
 let gameStarted = false;
 let gameEnded = false;
 let interval = null;
+let submittedName = "";
+let submittedScore = 0;
 
 // HTML DOM
 const title = document.getElementById('title');
@@ -15,9 +13,13 @@ const button1 = document.getElementById('button1');
 const button2 = document.getElementById('button2');
 const scoreDisplay = document.getElementById('scoreDisplay');
 const timerDisplay = document.getElementById('timerDisplay');
-const label1 = document.getElementById('label1');
 const input1 = document.getElementById('name');
 const timerBox = document.getElementById('timerBox');
+const playAgain = document.getElementById('playAgain');
+const scoreBox = document.getElementById('scoreBox');
+const scoreboard = document.getElementById('scoreboard');
+const scoreboardTitle = document.getElementById('scoreboardTitle');
+const loadingText = document.getElementById('loadingText');
 
 // UI Functions & Events
 button1.addEventListener('click', () => {
@@ -35,8 +37,10 @@ button2.addEventListener('click', () => {
 })
 
 input1.style.display = 'none';
-label1.style.display = 'none';
 button2.style.display = 'none';
+playAgain.style.display = 'none';
+scoreboard.style.display = 'none';
+scoreboardTitle.style.display = 'none';
 
 // Functions
 function increaseScore() {
@@ -67,12 +71,16 @@ function endGame() {
 
   button1.style.display = 'none';
   input1.style.display = 'block';
-  label1.style.display = 'block';
   button2.style.display = 'block';
+  playAgain.style.display = 'none';
+  scoreboard.style.display = 'none';
+  scoreboardTitle.style.display = 'none';
 }
 
 async function submitHighScore() {
   const currentScore = score; // använder spelets score
+  submittedName = input1.value.trim();
+  submittedScore = currentScore;
 
   try {
     const response = await fetch("https://hooks.zapier.com/hooks/catch/8338993/ujs9jj9/", {
@@ -84,34 +92,70 @@ async function submitHighScore() {
     });
 
     console.log(response);
+
+    title.innerText = "You have submitted your score!";
+
+    scoreDisplay.style.display = 'none';
+    input1.style.display = 'none';
+    button2.style.display = 'none';
+    scoreBox.style.display = 'none';
+    loadingText.style.display = 'block';
+    scoreboard.style.display = 'none';
+    playAgain.style.display = 'block';
+
+    scoreboard.style.display = 'block';
+    scoreboardTitle.style.display = 'block';
+    setTimeout(() => {
+      getScoreBoardData();
+    }, 5000);
+
   } catch (error) {
     console.log(error);
   }
 }
 
+playAgain.addEventListener('click', () => {
+  location.reload();
+});
+
 function getScoreBoardData() {
   const url = 'https://script.google.com/macros/s/AKfycbys5aEPMvNCutyhNYYCcQcCjzsi2UtqNspmKyCH-AicJxJbCJMrAoT0LUaYaXhTWA8n/exec';
+
   fetch(url)
-    .then(response => {
-      console.log('Response object:', response);
-      return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
-      console.log('Scoreboard data:', data);
+
+      loadingText.style.display = 'none';
+      scoreboard.style.display = 'block';
+
+      data = data.filter(player => Number(player.score) <= 50);
+      data.sort((a, b) => Number(b.score) - Number(a.score));
+
+      scoreboard.innerHTML = '';
 
       data.forEach((player, index) => {
-        console.log(`Row ${index + 1}: Name=${player.name}, Score=${player.score}`);
+        const li = document.createElement('li');
+
+        li.innerHTML = `
+    <span>${index + 1}. ${player.name}</span>
+    <span>${player.score}</span>
+  `;
+
+        if (
+          player.name.trim() === submittedName &&
+          Number(player.score) === Number(submittedScore)
+        ) {
+          li.classList.add('highlight');
+        }
+
+        scoreboard.appendChild(li);
       });
+
     })
     .catch(error => {
       console.error('Fetch error:', error);
     });
 }
-getScoreBoardData();
-
-// post value to API.
-// create and read. name + high score
-// zapier.com
 
 
 
